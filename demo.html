@@ -1,0 +1,88 @@
+<html>
+
+<head>
+    <title>Demo</title>
+    <script src="dist/bundle.js"></script>
+    <script>
+    angular.module('app', ['formly', 'formlyAttachModel'], function config(formlyConfigProvider) {
+            // set templates here
+            formlyConfigProvider.setType({
+                name: 'input',
+                templateUrl: 'input.html'
+            });
+            formlyConfigProvider.setType({
+                name: 'inputNoModelAttach',
+                templateUrl: 'input-no-model-attach.html'
+            });
+            formlyConfigProvider.setWrapper([{
+                template: [
+                    '<div class="formly-template-wrapper form-group"',
+                    'ng-class="{\'has-error\': options.validation.errorExistsAndShouldBeVisible}">',
+                    '<label for="{{::id}}">{{options.templateOptions.label}} {{options.templateOptions.required ? \'*\' : \'\'}}</label>',
+                    '<formly-transclude></formly-transclude>',
+                    '<div class="validation"',
+                    'ng-if="options.validation.errorExistsAndShouldBeVisible"',
+                    'ng-messages="options.formControl.$error">',
+                    '<div ng-messages-include="validation.html"></div>',
+                    '<div ng-message="{{::name}}" ng-repeat="(name, message) in ::options.validation.messages">',
+                    '{{message(options.formControl.$viewValue, options.formControl.$modelValue, this)}}',
+                    '</div>',
+                    '</div>',
+                    '</div>'
+                ].join(' ')
+            }]);
+        })
+        .controller('MainCtrl', function MainCtrl() {
+            console.log('main ctrl');
+            var main = this;
+            main.fields = [{
+                key: 'text',
+                type: 'inputNoModelAttach',
+                templateOptions: {
+                    label: 'ngModelController gets lost:',
+                    placeholder: 'No Model'
+                }
+            },
+            {
+                key: 'text',
+                type: 'input',
+                templateOptions: {
+                    label: 'ngModelController gets passed along:',
+                    placeholder: 'Has Model!'
+                }
+            }
+            ];
+        });
+    </script>
+</head>
+
+<body>
+    <div ng-app="app" ng-controller="MainCtrl as main">
+        <form name="main.form">
+            <formly-form model="main.model" fields="main.fields" form="main.form"></formly-form>
+        </form>
+        <script type="text/ng-template" id="input.html">
+            <input 
+              type="text" 
+              ng-model="model[options.key]"
+              placeholder="{{options.templateOptions.placeholder}}"
+              formly-attach-model 
+              formly-skip-ng-model-attrs-manipulator />
+              <pre style="background: #ccc; padding: 20px">
+              {{options | json}}
+              </pre>
+        </script>
+        <script type="text/ng-template" id="input-no-model-attach.html">
+            <input 
+              type="text" 
+              ng-model="model[options.key]"
+              placeholder="{{options.templateOptions.placeholder}}"
+              formly-skip-ng-model-attrs-manipulator />
+              <pre style="background: #ccc; padding: 20px">
+              {{options | json}}
+              </pre>
+        </script>
+    </div>
+</body>
+
+</html>
