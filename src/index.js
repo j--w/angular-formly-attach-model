@@ -1,6 +1,9 @@
 
   import angular from 'angular';
   var formly = require('angular-formly');
+  if(ON_TEST) {
+    require('angular-mocks/angular-mocks');
+  }
 
   function formlyAttachModel() {
     return {
@@ -12,7 +15,11 @@
     };
   }
 
-  export default angular.module('formlyAttachModel', [])
+  export default angular.module('formlyAttachModel', [formly])
     .directive('formlyAttachModel', formlyAttachModel)
     .name;
+
+    if(ON_TEST) {
+      require('./index.test')(angular.module('formlyAttachModel'));
+    }
 
