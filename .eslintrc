@@ -1,0 +1,15 @@
+{
+  "esnext": true,
+  "globals": {
+    "describe": false,
+    "beforeEach": false,
+    "it": false,
+    "expect": false,
+    "ON_TEST": false
+  },
+  "ecmaFeatures": { 
+    "modules": true,
+    "arrowFunctions": true,
+    "blockBindings": true
+  }
+}
